@@ -1,0 +1,66 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Credit Loan Approval System</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Credit Loan Approval System</h1>
+    <p class="subtitle">Enter the applicant's details below</p>
+
+    {% if error %}
+        <div class="message error">{{ error }}</div>
+    {% endif %}
+
+    {% if prediction is defined %}
+        <div class="message result">
+            <h2>Model Prediction</h2>
+            <p>{{ prediction }}</p>
+        </div>
+    {% endif %}
+
+    <form action="{{ url_for('predict') }}" method="POST">
+
+        {% for feature in features %}
+            <div class="form-group">
+                <label for="{{ feature }}">
+                    {{ feature.replace('_', ' ') }}
+                </label>
+
+                <input
+                    type="number"
+                    step="any"
+                    id="{{ feature }}"
+                    name="{{ feature }}"
+                    value="{{ form_data.get(feature, '') if form_data else '' }}"
+                    required
+                >
+            </div>
+        {% endfor %}
+
+        <button type="submit">Predict Loan Approval</button>
+
+    </form>
+
+    <p class="footer">
+        Predictions are estimates from a machine-learning model,
+        not a guarantee of loan approval.
+    </p>
+
+</div>
+
+</body>
+</html>
